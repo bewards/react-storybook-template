@@ -1,0 +1,42 @@
+.content-wrapper {
+  background: var(--primary);
+  border-radius: 1em;
+  border-top-left-radius: 0;
+  color: var(--white);
+  display: flex;
+  flex-direction: column;
+  padding: 1em;
+
+  :global(label) {
+    margin-right: 1rem;
+    width: 4rem;
+  }
+
+  :global(.btn-primary) {
+    align-self: flex-end;
+    border: 1px solid var(--white);
+
+    // To target child elements, use :global pseudo-selector
+    margin-top: 1em;
+  }
+}
+
+.tabs {
+  margin: 0;
+  padding: 0;
+
+  :global(.nav-item) {
+    border-radius: 1em 1em 0 0;
+    padding-top: 0.75em;
+  }
+
+  :global(.nav-item.active) {
+    background: var(--primary);
+    border: none;
+    color: var(--white);
+  }
+
+  .tab {
+    margin: 0;
+  }
+}

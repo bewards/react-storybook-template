@@ -1,0 +1,64 @@
+name: rp-react-best-practices CI
+on: [push]
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          cache: 'npm'
+
+      - run: node -v
+      - run: npm -v
+
+      - name: cache packages
+        uses: actions/cache@v3.0.4
+        env:
+          cache-name: ci-npm-modules
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json')}}
+
+      - run: npm install
+      - run: npm run test:ci
+
+      - run: npm run build
+        id: build
+      - name: Upload production artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: |
+            dist
+
+      - run: npm run build:storybook
+      - name: Upload storybook artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: storybook
+          path: |
+            storybook-static
+
+      # if your app needs an API/etc. to function, this won't be very useful, since you'll just be checking how fast you can render that error page/state
+      # if that isn't valuable, you may find `nightly-lighthouse.yml` more useful to test against your deployed site.
+      # #{LHCI-CI-STEP}
+      - run: npm run lhci
+        name: Run Lighthouse CI (lhci)
+        if: always() && steps.build.outcome == 'success'
+        id: runlhci
+        env:
+          # needed for Github App - https://github.com/GoogleChrome/lighthouse-ci/blob/main/docs/getting-started.md#github-app-method-recommended
+          # #{LHCI-GH-TOKEN}
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+
+      # having the .lighthouseci folder can be very helpful to debug issues with the LHCI run or your thresholds, but you may not want to keep it if there were no issues
+      - name: Upload Lighthouse CI artifacts if it failed
+        uses: actions/upload-artifact@v2
+        with:
+          name: lighthouse-ci
+          path: .lighthouseci
+        if: always() && steps.build.outcome == 'success' && steps.runlhci.outcome != 'success'

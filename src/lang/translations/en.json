@@ -1,0 +1,14 @@
+{
+  "react-best-practices.components.Navigation.detailTitle" : "Project Detail",
+  "react-best-practices.components.Navigation.homeTitle" : "Projects By Status",
+  "react-best-practices.components.StatusToggle.filter" : "Filter",
+  "react-best-practices.pages.ProjectSwimlanes.addNewProject": "Add New Project",
+  "react-best-practices.pages.ProjectSwimlanes.new": "New",
+  "react-best-practices.pages.ProjectSwimlanes.working": "Working",
+  "react-best-practices.pages.ProjectSwimlanes.delivered": "Delivered",
+  "react-best-practices.pages.ProjectSwimlanes.archived": "Archived",
+  "react-best-practices.components.StatusColumn.new": "New",
+  "react-best-practices.components.StatusColumn.working": "Working",
+  "react-best-practices.components.StatusColumn.delivered": "Delivered",
+  "react-best-practices.components.StatusColumn.archived": "Archived"
+}

@@ -1,0 +1,38 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+/.idea
+/.lighthouse/*
+
+# testing
+/coverage
+
+# production
+/build
+/.lighthouseci
+/storybook-static
+
+# vite build dirs
+dist
+dist-ssr
+
+# misc
+.DS_Store
+.env.local
+.env.*.local
+*.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# vscode settings
+.vscode/*
+!.vscode/launch.json
+
+# artifacts from using https://github.com/nektos/act to test github actions locally
+/aws
+*.zip

@@ -1,0 +1,24 @@
+.status-card {
+  background-color: #000;
+  color: #fff;
+  text-align: left;
+}
+
+.status-badge {
+  cursor: default;
+  position: relative;
+  user-select: none;
+
+  .status-edit {
+    display: none;
+  }
+
+  &:hover {
+    .status-edit {
+      display: inherit;
+      position: absolute;
+      right: -10px;
+      top: 0;
+    }
+  }
+}

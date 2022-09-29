@@ -1,0 +1,39 @@
+{
+  "extends": ["stylelint-config-standard-scss", "stylelint-config-prettier"],
+  "plugins": ["stylelint-order", "stylelint-high-performance-animation"],
+  "rules": {
+    "plugin/no-low-performance-animation-properties": true,
+    "at-rule-no-vendor-prefix": true,
+    "at-rule-semicolon-space-before": "never",
+    "block-closing-brace-empty-line-before": "never",
+    "block-no-empty": true,
+    "color-no-invalid-hex": true,
+    "length-zero-no-unit": true,
+    "max-nesting-depth": 6,
+    "order/properties-alphabetical-order": true,
+    "scss/dollar-variable-empty-line-before": null,
+    "scss/dollar-variable-pattern": [
+      "^[_]?[a-z]+([a-z0-9-]+[a-z0-9]+)?$",
+      {
+        "ignore": "global"
+      }
+    ],
+    "scss/at-extend-no-missing-placeholder": null,
+    "selector-class-pattern": null,
+    "selector-max-compound-selectors": 6,
+    "selector-no-qualifying-type": [
+      true,
+      {
+        "ignore": ["attribute", "class"]
+      }
+    ],
+    "selector-pseudo-class-no-unknown": [
+      true,
+      {
+        "ignorePseudoClasses": ["global"]
+      }
+    ],
+    "string-quotes": "single",
+    "value-keyword-case": null
+  }
+}

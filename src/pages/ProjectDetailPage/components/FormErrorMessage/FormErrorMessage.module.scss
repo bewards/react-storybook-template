@@ -1,0 +1,56 @@
+/**
+ ** this is some *example* styling, stripped down from a recent app
+ ** this *will need changes* (or just outright replacement) to fit your application
+ **/
+
+$pinkish-red: #e20f40;
+$pastel-pinkish-red: #ffdce4;
+$charcoal-grey: #394050;
+$white: #fff;
+
+@mixin error-icon {
+  background-color: $pinkish-red;
+  border-radius: 50%;
+  color: $white;
+  content: '!';
+  font-size: 1.6rem;
+  height: 2rem;
+  line-height: 2rem;
+  position: absolute;
+  right: 0.5rem;
+  text-align: center;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2rem;
+}
+
+.error-message {
+  background-color: $pastel-pinkish-red;
+  border: 1px solid $pinkish-red;
+  border-radius: 4px;
+  color: $charcoal-grey;
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  margin-top: 2rem;
+  padding: 1rem;
+  padding-left: 4.5rem;
+  position: relative;
+  width: 100%;
+
+  &::before {
+    @include error-icon;
+
+    left: 1.6rem;
+  }
+
+  a,
+  a:link,
+  a:visited,
+  a:hover {
+    text-decoration: underline;
+  }
+}
+
+.error-message__item {
+  margin-top: 0.5rem;
+}

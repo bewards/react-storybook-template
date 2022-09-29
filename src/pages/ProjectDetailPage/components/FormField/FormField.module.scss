@@ -1,0 +1,156 @@
+/**
+ ** this is some *example* styling, stripped down from a recent app
+ ** this *will need changes* (or just outright replacement) to fit your application
+ **/
+
+$red: #f00;
+$lightRed: #fffbfb;
+$light-blue-grey: #cdcfd3;
+$pale-lilac: #ebebed;
+$pinkish-red: #e20f40;
+$white: #fff;
+
+$roboto: 'roboto', Helvetica, Verdana, sans-serif;
+$exo: 'exo', Helvetica, Verdana, sans-serif;
+
+$light: 300;
+$regular: 400;
+$medium: 500;
+$semi-bold: 600;
+$bold: 700;
+
+$form-color: $light-blue-grey;
+$form-border-color: #e5e6e8;
+$form-background-color: #434a58;
+$form-checkmark-color: #0ccda2;
+$label-color: $pale-lilac;
+$form-border: solid 1px $form-border-color;
+$form-field-height: 5.6rem;
+$form-field-padding: 1.6rem;
+
+@mixin error-icon {
+  background-color: $pinkish-red;
+  border-radius: 50%;
+  color: $white;
+  content: '!';
+  font-size: 1.6rem;
+  height: 2rem;
+  line-height: 2rem;
+  position: absolute;
+  right: 0.5rem;
+  text-align: center;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2rem;
+}
+
+@mixin accessible-hide {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+.form-field {
+  position: relative;
+
+  &.form-field-type-checkbox {
+    margin-bottom: 2rem;
+
+    label {
+      cursor: pointer;
+      font-size: 1.4rem;
+      padding-left: 4rem;
+    }
+
+    input {
+      position: absolute;
+      top: 50%;
+      transform: translate(0, -50%);
+    }
+
+    .form-field__error-message {
+      margin-bottom: -15px;
+      margin-left: 4rem;
+    }
+  }
+
+  &.form-field-component-select,
+  &.form-field-component-time,
+  &.form-field-type-text,
+  &.form-field-type-number,
+  &.form-field-type-email,
+  &.form-field-type-password,
+  &.form-field-type-search,
+  &.form-field-type-tel {
+    &.form-field--error {
+      input,
+      textarea {
+        border: solid 1px $pinkish-red;
+      }
+    }
+  }
+
+  &.form-field-component-select {
+    &.form-field--error {
+      &::after {
+        margin-right: 3rem;
+      }
+    }
+  }
+}
+
+.form-field:not(.form-field-type-checkbox).form-field--touched,
+.form-field:not(.form-field-type-checkbox).form-field--has-value {
+  input::placeholder {
+    color: transparent;
+  }
+}
+
+.form-field-type-checkbox {
+  input[type='checkbox'] {
+    height: 2.8rem;
+    opacity: 0;
+    width: 2.8rem;
+  }
+}
+
+.form-field-type-checkbox label::before,
+.form-field-type-checkbox label::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.form-field-type-checkbox label::before {
+  border: solid 1px #e5e6e8;
+  display: inline-block;
+  height: 2rem;
+  left: 1.2rem;
+  width: 2rem;
+}
+
+.form-field-type-checkbox label::after {
+  border-bottom: 1px solid $form-checkmark-color;
+  border-radius: none;
+  border-right: 1px solid $form-checkmark-color;
+  display: none;
+  height: 1.3rem;
+  left: 1.9rem;
+  transform: translate(0, -50%) translate(0, -0.3rem) rotate(45deg);
+  width: 0.7rem;
+}
+
+.form-field-type-checkbox input:checked ~ label::after {
+  display: inline-block;
+}
+
+.form-field-type-checkbox input:focus ~ label::before {
+  // TODO when changing focus indicator for 725 add #86B7FA here instead of double border
+  border-width: 2px;
+}

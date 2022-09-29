@@ -1,0 +1,68 @@
+name: nightly lighthouse
+on:
+  # only enabling manual execution in the best-practices repo so this doesn't run every night
+  workflow_dispatch:
+  # schedule:
+  #   - cron: '10 10 * * *' # every day at 10:10am UTC
+jobs:
+  nightly-lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          cache: 'npm'
+
+      - run: npm install
+
+      - name: prepare variables
+        if: always()
+        run: |
+          echo "CURRENT_HASH_DESKTOP=$(node -e "console.log(new Date().getTime().toString(16).split('').reverse().join(''))")" >> $GITHUB_ENV
+          echo "CURRENT_TIME=$(date +%Y-%m-%dT%H:%M:%S+00:00)" >> $GITHUB_ENV
+          echo "COMMIT_TIME=$(date --iso-8601=seconds)" >> $GITHUB_ENV
+
+      # these use a custom lighthouseci config file
+      # you either want to use different app tokens for desktop/mobile/CI (like we do here), or manipulate the commit message/time/hash more
+
+      - run: npm run lhci:nightly:desktop
+        name: Run Lighthouse CI (lhci) for desktop browser
+        id: desktop
+        env:
+          # need to override git hash as we want a nightly report, even if the git SHA hasn't changed
+          LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ env.CURRENT_HASH_DESKTOP }}
+          LHCI_BUILD_CONTEXT__COMMIT_TIME: ${{ env.COMMIT_TIME }}
+          LHCI_BUILD_CONTEXT__COMMIT_MESSAGE: ${{ env.CURRENT_TIME }} - Desktop nightly run of lighthouse
+          LHCI_BUILD_CONTEXT__ANCESTOR_HASH: 'dddddddd'
+          LHCI_BUILD_CONTEXT__AUTHOR: Lighthouse CI <noreply@rightpoint.com>
+          LHCI_BUILD_CONTEXT__AVATAR_URL: https://www.rightpoint.com/-/media/images/rightpoint/rightpoint%20logos/favicon.png
+
+      - name: prepare mobile variables
+        if: always()
+        run: |
+          echo "CURRENT_HASH_MOBILE=$(node -e "console.log(new Date().getTime().toString(16).split('').reverse().join(''))")" >> $GITHUB_ENV
+          echo "COMMIT_TIME=$(date --iso-8601=seconds)" >> $GITHUB_ENV
+
+      - run: npm run lhci:nightly:mobile
+        name: Run Lighthouse CI (lhci) for mobile browser
+        if: always() # still want to run this even if desktop failed so we get the scores for both uploaded
+        id: mobile
+        env:
+          # need to override git hash as we want a nightly report, even if the git SHA hasn't changed
+          LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ env.CURRENT_HASH_MOBILE }}
+          LHCI_BUILD_CONTEXT__COMMIT_TIME: ${{ env.COMMIT_TIME }}
+          LHCI_BUILD_CONTEXT__ANCESTOR_HASH: '00000000'
+          LHCI_BUILD_CONTEXT__COMMIT_MESSAGE: ${{ env.CURRENT_TIME }} - Mobile nightly run of lighthouse
+          LHCI_BUILD_CONTEXT__AUTHOR: Lighthouse CI <noreply@rightpoint.com>
+          LHCI_BUILD_CONTEXT__AVATAR_URL: https://www.rightpoint.com/-/media/images/rightpoint/rightpoint%20logos/favicon.png
+
+      # having the .lighthouseci folder can be very helpful to debug issues with the LHCI run or your thresholds, but you may not want to keep it if there were no issues
+      - name: Upload Lighthouse CI artifacts if it failed
+        uses: actions/upload-artifact@v2
+        with:
+          name: lighthouse-ci
+          path: .lighthouseci
+        if: always() && (steps.desktop.outcome != 'success' || steps.mobile.outcome != 'success')

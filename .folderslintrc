@@ -1,0 +1,12 @@
+{
+  "root": "src",
+  "rules": [
+    "*",
+    "components/*",
+    "lang/**",
+    "lib/**",
+    "mockApi/**",
+    "models/**",
+    "pages/*/components/*"
+  ]
+}

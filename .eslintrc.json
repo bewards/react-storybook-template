@@ -1,0 +1,86 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "plugins": [
+    "@typescript-eslint",
+    "prettier",
+    "react-hooks",
+    "react",
+    "jsx-a11y",
+    "lodash",
+    "check-file",
+    "filenames",
+    "testing-library"
+  ],
+  "extends": [
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:jsx-a11y/recommended",
+    "plugin:react/recommended",
+    "plugin:prettier/recommended",
+    "plugin:storybook/recommended",
+    "plugin:testing-library/react"
+  ],
+  "ignorePatterns": ["src/serviceWorker.ts"],
+  "rules": {
+    "testing-library/await-async-query": "error",
+    "testing-library/no-await-sync-query": "error",
+    "testing-library/no-debugging-utils": "warn",
+    "testing-library/no-dom-import": "off",
+    "testing-library/render-result-naming-convention": "off",
+    "testing-library/no-node-access": "off",
+    "testing-library/no-wait-for-multiple-assertions": "off",
+    "testing-library/no-render-in-setup": "off",
+    "check-file/folder-naming-convention": [
+      "error",
+      {
+        "src/components/*": "PASCAL_CASE",
+        "src/pages/*": "PASCAL_CASE",
+        "src/pages/*/components": "PASCAL_CASE"
+      }
+    ],
+    "filenames/match-exported": ["error", null],
+    // override tslint-react rules here
+    "semicolon": ["off", "never"],
+    "interface-name": ["off", "never-prefix"],
+    "object-literal-sort-keys": 0,
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "react/jsx-filename-extension": [0],
+    "no-explicit-any": 0,
+    "no-var": 2,
+    "@typescript-eslint/ban-ts-comment": 1,
+    "@typescript-eslint/no-empty-interface": 1,
+    "@typescript-eslint/no-unused-vars": [1, { "ignoreRestSiblings": true }],
+    "@typescript-eslint/no-empty-function": 1,
+    "@typescript-eslint/explicit-function-return-type": [
+      "warn",
+      {
+        "allowExpressions": true,
+        "allowTypedFunctionExpressions": true
+      }
+    ],
+    "react/destructuring-assignment": 1,
+    "jsx-a11y/no-onchange": 0,
+    "react/react-in-jsx-scope": 0,
+    "lodash/import-scope": [2, "method"]
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "overrides": [
+    {
+      "files": ["**/*.stories.*"],
+      "rules": {
+        "import/no-anonymous-default-export": "off"
+      }
+    }
+  ]
+}

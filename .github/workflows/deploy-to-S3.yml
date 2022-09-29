@@ -1,0 +1,51 @@
+name: rp-react-best-practices deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    name: Upload to AWS S3
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        if: ${{ !env.ACT }} # while testing with act, we want it just use the local directory
+        uses: actions/checkout@v2
+        
+      - uses: actions/setup-node@v2
+        if: ${{ !env.ACT }} # the container act uses already comes with Node 16
+        with:
+          node-version: '16'
+          cache: 'npm'
+
+      - run: npm install
+
+      - run: npm run build
+        id: build
+
+      # self-hosted runners (like `act`) don't come with aws cli or less installed so we need to install it manually
+      - name: Install AWS CLI and less
+        if: ${{ env.ACT }}
+        run: |
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install
+          sudo apt-get update -y
+          sudo apt-get install -y less
+      
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      
+      - name: Upload new build
+        run: |
+          aws s3 sync ./dist s3://rp-react-best-practices --delete
+
+      - name: Invalidate CloudFront
+        run: |
+          aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_CF_DIST_ID }} --paths "/*"
